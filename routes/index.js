@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const OpenAI = require("openai");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -8,13 +9,6 @@ const openai = new OpenAI({
   baseURL: "https://api.deepseek.com",
   apiKey: process.env.key,
 });
-
-const user_prompt = "Which is the longest river in the world? The Nile River.";
-
-const messages = [
-  { role: "system", content: system_prompt },
-  { role: "user", content: user_prompt },
-];
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
@@ -37,7 +31,7 @@ router.get("/data", async function (req, res, next) {
     const user_prompt = message;
 
     const messages = [
-      { role: "system", content: system_prompt },
+      { role: "system", content: systemPrompt },
       { role: "user", content: user_prompt },
     ];
 
