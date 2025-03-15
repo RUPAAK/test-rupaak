@@ -17,7 +17,7 @@ router.get("/", function (req, res, next) {
 router.post("/data", async function (req, res, next) {
   try {
     const { selectedStyle, message } = req.body;
-    const systemPrompt = `You are a social media user. Generate a ${selectedStyle} reply comment without quotation marks at the start or end. If style is:
+    const systemPrompt = `User will provide a query and generate response in provided JSON format. You are a social media user. Generate a ${selectedStyle} reply comment without quotation marks at the start or end. If style is:
               - supportive: be encouraging and positive
               - agreed: agree with the content
               - witty: use clever humor or wordplay
@@ -27,7 +27,12 @@ router.post("/data", async function (req, res, next) {
               - curious: ask thoughtful questions
               - sarcastic: use irony and dry humor
               - funny: be humorous and light-hearted
-              Make it sound natural and conversational, avoid using hashtags or social media formatting. Keep it between 50-200 characters. Remove any quotation marks from the response.`;
+              Make it sound natural and conversational, avoid using hashtags or social media formatting. Keep it between 50-200 characters. Remove any quotation marks from the response.
+            EXAMPLE JSON OUTPUT:
+                {
+                    "response": "response"
+                }
+              `;
     const user_prompt = message;
 
     const messages = [
@@ -38,14 +43,15 @@ router.post("/data", async function (req, res, next) {
     const completion = await openai.chat.completions.create({
       model: "deepseek-chat",
       messages: messages,
+      response_format: {
+        type: "json_object",
+      },
     });
 
     const responseContent = completion.choices[0].message.content;
     const parsedResponse = JSON.parse(responseContent);
 
-    res.send({
-      data: parsedResponse,
-    });
+    res.send(parsedResponse);
   } catch (error) {
     res.send({
       data: error.message || "Error",
