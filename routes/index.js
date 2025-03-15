@@ -38,9 +38,6 @@ router.post("/data", async function (req, res, next) {
     const completion = await openai.chat.completions.create({
       model: "deepseek-chat",
       messages: messages,
-      response_format: {
-        type: "json_object",
-      },
     });
 
     const responseContent = completion.choices[0].message.content;
