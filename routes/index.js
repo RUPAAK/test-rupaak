@@ -14,7 +14,7 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.get("/data", async function (req, res, next) {
+router.post("/data", async function (req, res, next) {
   try {
     const { selectedStyle, message } = req.body;
     const systemPrompt = `You are a social media user. Generate a ${selectedStyle} reply comment without quotation marks at the start or end. If style is:
