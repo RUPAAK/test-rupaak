@@ -49,10 +49,11 @@ router.post("/data", async function (req, res, next) {
     res.send({
       data: parsedResponse,
     });
-  } catch (error) {}
-  res.send({
-    data: "message",
-  });
+  } catch (error) {
+    res.send({
+      data: error.message || "Error",
+    });
+  }
 });
 
 module.exports = router;
